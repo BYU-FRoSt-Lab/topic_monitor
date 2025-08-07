@@ -29,9 +29,15 @@ class TypeChecker(Node):
             self.type_sub,
             10
         )
+
+        self.old_status = None
     
     def type_sub(self, msg: SbgGpsPos):
         currentStatus = GpsPosType(msg.status.type)
+
+        if self.old_status is None or self.old_status != currentStatus:
+            self.old_status = currentStatus
+            self.get_logger().info(f"GPS Status Updated: {currentStatus.name}")
 
         # This should only run for the inital received message and at start up
         if (currentStatus == GpsPosType.NO_SOLUTION):
