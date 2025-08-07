@@ -13,8 +13,23 @@
 #   Time sync status is referenced to the first topic received by the callback function.
 topics:
   # Inertial Sense IMU/GPS
-  - name: /sample_nav_sat_fix
-    type: sensor_msgs/msg/NavSatFix
+  - name: /imu/data
+    type: sensor_msgs/msg/Imu
+
+  - name: /ouster/imu
+    type: sensor_msgs/msg/Imu
+
+  - name: /oak_d_lr_1/imu/data
+    type: sensor_msgs/msg/Imu
+
+  - name: /oak_d_lr_2/imu/data
+    type: sensor_msgs/msg/Imu
+
+  - name: /oak_d_lr_3/imu/data
+    type: sensor_msgs/msg/Imu
+
+  - name: /oak_thermal/imu/data
+    type: sensor_msgs/msg/Imu
 
   # # Ouster LiDARs
   # - name: /ouster_top/points
