@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-project(topic_monitor CXX)
+project(frost_topic_monitor CXX)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -20,10 +20,10 @@ find_package(yaml-cpp REQUIRED)
 
 
 # Define the executable
-add_executable(topic_monitor_node src/topic_monitor_node.cpp)
+add_executable(frost_topic_monitor_node src/frost_topic_monitor_node.cpp)
 
 # Link necessary libraries
-ament_target_dependencies(topic_monitor_node
+ament_target_dependencies(frost_topic_monitor_node
   rclcpp
   std_msgs
   sensor_msgs
@@ -33,11 +33,11 @@ ament_target_dependencies(topic_monitor_node
   rosidl_typesupport_introspection_cpp
 )
 
-target_link_libraries(topic_monitor_node yaml-cpp)
+target_link_libraries(frost_topic_monitor_node yaml-cpp)
 
 # Install the executable
 install(TARGETS
-  topic_monitor_node
+  frost_topic_monitor_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

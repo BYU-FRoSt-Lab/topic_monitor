@@ -60,13 +60,13 @@ struct TopicInfo
 };
 
 
-class TopicMonitor : public rclcpp::Node
+class FrostTopicMonitor : public rclcpp::Node
 {
 public:
-    TopicMonitor()
-        : Node("topic_monitor")
+    FrostTopicMonitor()
+        : Node("frost_topic_monitor")
     {
-        RCLCPP_INFO(this->get_logger(), "In topic_monitor constructor");
+        RCLCPP_INFO(this->get_logger(), "In frost_topic_monitor constructor");
     
         this->declare_parameter<std::string>("topics_file", "topics.yaml");
         topics_file_ = this->get_parameter("topics_file").as_string();
@@ -77,7 +77,7 @@ public:
         RCLCPP_INFO(this->get_logger(), "Starting 5 second timer to count messaged published from topics...");
         monitoring_start_time_ = this->now();
         timer_ = this->create_wall_timer(
-            5s, std::bind(&TopicMonitor::report_and_shutdown, this));
+            5s, std::bind(&FrostTopicMonitor::report_and_shutdown, this));
 
         // Create an executor to process callbacks
         executor_ = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
@@ -89,7 +89,7 @@ public:
         });
     }
 
-    ~TopicMonitor()
+    ~FrostTopicMonitor()
     {
         if (spin_thread_.joinable())
         {
@@ -108,9 +108,9 @@ private:
     {
         std::string pkg_share_dir;
         try {
-            pkg_share_dir = ament_index_cpp::get_package_share_directory("topic_monitor");
+            pkg_share_dir = ament_index_cpp::get_package_share_directory("frost_topic_monitor");
         } catch (const std::exception& e) {
-            RCLCPP_ERROR(this->get_logger(), "Error getting package share directory for 'topic_monitor': %s", e.what());
+            RCLCPP_ERROR(this->get_logger(), "Error getting package share directory for 'frost_topic_monitor': %s", e.what());
             rclcpp::shutdown();
             return;
         } catch (...) {
@@ -201,6 +201,8 @@ private:
     {
         std::string package_name = message_type.substr(0, message_type.find('/'));
         std::string msg_name = message_type.substr(message_type.find_last_of('/') + 1);
+
+        // TODO: Add in the different message types we'll need
 
         // Workaround: We'll deserialize the message if it's one of the known types with a header.
         if (message_type == "sensor_msgs/msg/Imu") {
@@ -324,7 +326,7 @@ private:
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<TopicMonitor>();
+    auto node = std::make_shared<FrostTopicMonitor>();
     // The node will manage its own spinning via the MultiThreadedExecutor in a separate thread.
     // main will just wait for ROS to shutdown, which is triggered by report_and_shutdown().
     node->start_monitoring();
